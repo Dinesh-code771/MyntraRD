@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function Banners({
   banner,
@@ -6,17 +6,27 @@ export default function Banners({
   banner: { src: string; alt: "" }[];
 }) {
   const [current, setCurrent] = React.useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => {
+        return (prev + 1) % banner.length;
+      });
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex overflow-x-auto gap-2">
         {/* banner */}
-        <div
-          className="flex min-w-full  justify-center items-center flex-1"
-        >
+        <div className="flex min-w-full  justify-center items-center flex-1">
           <img
             className="  object-content rounded-md"
-            src={banner[current].src}
-            alt={banner[current].alt}
+            src={banner[current]?.src}
+            alt={banner[current]?.alt}
           />
         </div>
       </div>

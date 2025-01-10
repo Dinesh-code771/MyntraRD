@@ -5,16 +5,19 @@ import { LuHeart } from "react-icons/lu";
 import { CiUser } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { setMenuButtonClicked } from "../Redux/navBarSlice";
+import { setMenuButtonClicked } from "../Redux/navBarSlice.js";
 import Search from "./Search";
+import { IoIosLogOut } from "react-icons/io";
+import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 export default function Navbar() {
   const isMenuBarOpen = useSelector(
     (state: any) => state.navBarSlice.isMenuButtonClicked
   );
   const dispatch = useDispatch();
-
+  const { logout } = useAuth0();
   return (
-    <nav className="sticky top-0 bg-white shadow-md w-full">
+    <nav className="sticky top-0 bg-white shadow-md w-full z-50">
       <div className="wrapper py-5 w-[85%] md:w-[90%] mx-auto flex justify-between items-center">
         {/* left side */}
         <div className="leftWrapper flex items-center gap-5 md:gap-10 flex-1">
@@ -26,21 +29,36 @@ export default function Navbar() {
           >
             <GiHamburgerMenu size={20} />
           </div>
-          <img src="myntraIcon.png" width={30} height={30} alt="myntra icon" />
+          <Link to="/">
+            <img
+              src="/myntraIcon.png"
+              width={30}
+              height={30}
+              alt="myntra icon"
+            />
+          </Link>
           <div className="hidden md:flex">
             <ul className="text-black font-bold flex gap-5">
-              <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
-                Men
-              </li>
-              <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
-                Women
-              </li>
-              <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
-                Kids
-              </li>
-              <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
-                Beauty
-              </li>
+              <Link to="/men">
+                <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
+                  Men
+                </li>
+              </Link>
+              <Link to="/women">
+                <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
+                  Women
+                </li>
+              </Link>
+              <Link to="/kids">
+                <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
+                  Kids
+                </li>
+              </Link>
+              <Link to="/beauty">
+                <li className="inline-block px-3 py-1 text-sm text-gray-700 cursor-pointer">
+                  Beauty
+                </li>
+              </Link>
             </ul>
           </div>
         </div>
@@ -54,6 +72,11 @@ export default function Navbar() {
           <div className="icons flex justify-end gap-5">
             <LuHeart size={20} />
             <IoBagOutline size={20} />
+            <IoIosLogOut
+              size={20}
+              onClick={() => logout()}
+              className="cursor-pointer"
+            />
             <div className="hidden md:inline">
               <CiUser size={20} />
             </div>

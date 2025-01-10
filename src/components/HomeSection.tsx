@@ -4,15 +4,18 @@ import Categories from "./Categories";
 import Banners from "./Banners";
 import useWindowSize from "../hooks/useWindowSize";
 import Brands from "./Brands";
+import ShopByCategory from "./ShopByCategory";
 
 export default function HomeSection() {
   const { width, height } = useWindowSize();
   return (
-    <div className="p-2 flex flex-col gap-2">
-      <Search
-        placeholder={"Search by branch and category"}
-        className="rounded-full shadow-lg overflow-hidden px-2 md:hidden"
-      />
+    <div className="flex flex-col gap-2">
+      <div className="bg-white p-2  sticky top-[68px]">
+        <Search
+          placeholder={"Search by branch and category"}
+          className="rounded-full shadow-lg overflow-hidden px-2 md:hidden"
+        />
+      </div>
       <Categories />
       <Banners
         banner={
@@ -48,7 +51,7 @@ export default function HomeSection() {
         }
       />
       <Brands
-        title="brands"
+        title="First Time on Myntra"
         sections={[
           {
             src: [
@@ -103,6 +106,71 @@ export default function HomeSection() {
               "GANT",
               "boohooMan",
             ],
+          },
+        ]}
+      />
+      <ShopByCategory
+        title="Shop by Category"
+        images={[
+          {
+            categoryName: "mens-clothing",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/hth991PG_c1a5d8d8de8e46f3b3088f6710979bf6.jpg",
+          },
+          {
+            categoryName: "women-clothing",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/xt3Pbjno_b5dc284221244c99a749cbecd50677db.jpg",
+          },
+          {
+            categoryName: "kids-clothing",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/hth991PG_c1a5d8d8de8e46f3b3088f6710979bf6.jpg",
+          },
+          {
+            categoryName: "ethnic-wear",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/xt3Pbjno_b5dc284221244c99a749cbecd50677db.jpg",
+          },
+          {
+            categoryName: "kids",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/6q8WRXBA_929fe0ca16df41e79c1b15eff8c52d32.jpg",
+          },
+          {
+            categoryName: "footwear",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/56G90xOM_0259569412dc450ebf25ff7cbf24e5f1.jpg",
+          },
+          {
+            categoryName: "accessories",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/osTGPUnc_146cf0dc50b54812a5522577727ffe0d.jpg",
+          },
+          {
+            categoryName: "casual-wear",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/6q8WRXBA_929fe0ca16df41e79c1b15eff8c52d32.jpg",
+          },
+          {
+            categoryName: "beauty-products",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/56G90xOM_0259569412dc450ebf25ff7cbf24e5f1.jpg",
+          },
+          {
+            categoryName: "category-10",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/hth991PG_c1a5d8d8de8e46f3b3088f6710979bf6.jpg",
+          },
+          {
+            categoryName: "category-11",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/xt3Pbjno_b5dc284221244c99a749cbecd50677db.jpg",
+          },
+          {
+            categoryName: "category-12",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/6q8WRXBA_929fe0ca16df41e79c1b15eff8c52d32.jpg",
+          },
+          {
+            categoryName: "category-13",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/56G90xOM_0259569412dc450ebf25ff7cbf24e5f1.jpg",
+          },
+          {
+            categoryName: "category-14",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/osTGPUnc_146cf0dc50b54812a5522577727ffe0d.jpg",
+          },
+          {
+            categoryName: "category-15",
+            src: "https://assets.myntassets.com/w_196,c_limit,fl_progressive,dpr_2.0/assets/images/2024/DECEMBER/4/osTGPUnc_146cf0dc50b54812a5522577727ffe0d.jpg",
           },
         ]}
       />

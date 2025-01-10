@@ -10,7 +10,7 @@ export default function Brands({
   const [current, setCurrent] = React.useState(0);
   return (
     <div>
-      <h3>{title}</h3>
+      <h3 className="text-center font-semibold text-[4.5rem] text-[#F59052] uppercase">{title}</h3>
 
       <div className="sections">
         {

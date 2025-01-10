@@ -36,7 +36,7 @@ export default function Categories() {
           <>
             <CatergoryCard
               key={index}
-              src={category.src}
+              src={category?.src}
               title={category.title}
             />
           </>
