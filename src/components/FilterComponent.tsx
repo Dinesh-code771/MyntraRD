@@ -29,7 +29,6 @@ export default function FilterComponent({
     componentType
   ];
 
-
   const firstItems = filterValues?.slice(0, 9);
 
   let sortedFilterValues: any = [];
@@ -54,26 +53,10 @@ export default function FilterComponent({
     }
   }
 
-
   const [isMulitiSelectEnabled, setIsMulitiSelectEnabled] =
     React.useState<boolean>(false);
 
   const [isSearchEnabled, setIsSearchEnabled] = React.useState<boolean>(false);
-
-  // fetch data from the server
-  useEffect(() => {
-    // fetch data from the server
-    const dataFromServer = [
-      { filterName: "Dresses", count: 100, type: "Categorie" },
-    ];
-    dispatch(
-      setFilterValues({
-        title: componentType,
-        values: dataFromServer,
-
-      })
-    );
-  }, []);
 
   // useEffect(() => {
   //   let filteredValues = filterValues?.filter((item) => {
@@ -127,6 +110,7 @@ export default function FilterComponent({
       );
     }
   }
+
   return (
     <div className="relative border-b filterContainerWrapper p-3 flex flex-col gap-3">
       {/* filter header  */}

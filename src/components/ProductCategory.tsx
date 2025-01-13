@@ -6,6 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+  fetctSelectedFilter,
   removePaticularFilter,
   resetFilterValues,
   setPrice,
@@ -19,6 +20,7 @@ import Brands from "./Brands";
 import Categories from "./Categories";
 import { listDocuments } from "../apis/listDocuments";
 import { useParams } from "react-router-dom";
+import { insertDataIntoDocument } from "../apis/insertDataIntoDocument";
 type productDetailsProps = {
   productDetails: {
     title: string;
@@ -40,6 +42,8 @@ export default function ProductCategory({
     categories: [],
     colors: [],
   });
+
+  const allFilters = useSelector((state: any) => state.filterSlice);
 
   const [categorySearch, setCatgegorySearch] = useState("");
   const [brandSearch, setBrandSearch] = useState("");
@@ -157,6 +161,27 @@ export default function ProductCategory({
       searchfilterdCategories: searchCategories,
     });
   }, [categorySearch]);
+
+  useEffect(() => {
+    dispatch(fetctSelectedFilter() as any);
+  }, []);
+
+  useEffect(() => {
+    async function insertData() {
+      console.log("allFilters", allFilters);
+      const res = await insertDataIntoDocument(
+        JSON.stringify(allFilters),
+        "676a1ec4001bf5b712d9",
+        "676a1ee4001ae452e2df",
+        "CategoryType",
+        name
+      );
+      console.log(res, "dataRes");
+    }
+    setTimeout(() => {
+      insertData();
+    }, 4000);
+  }, [allFilters]);
 
   return (
     <div className="wrapper h-[88%]">

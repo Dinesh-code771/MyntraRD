@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { listDocuments } from "../apis/listDocuments.js";
 const initialState = {
   Categorie: [],
   Brand: [],
@@ -7,16 +8,41 @@ const initialState = {
   Gender: [],
   prices: [],
 };
+//thunk for fetching selected filters form the API
+
+export const fetctSelectedFilter = createAsyncThunk(
+  "filter/fetchSelectedFilters",
+  async (name, { dispatch, rejectWithValue }) => {
+    try {
+      // Call the API using the name parameter
+      const res = await listDocuments(
+        "676a1ec4001bf5b712d9",
+        "676a1ee4001ae452e2df",
+        "CategoryType",
+        "kids", // Use the name argument
+        ["selectedFilters"]
+      );
+      const { selectedFilters } = res;
+      console.log(selectedFilters, "selectedFilters");
+      dispatch(updateFilters(selectedFilters));
+      // Return the response to be handled in extraReducers
+      return res;
+    } catch (error) {
+      // Pass the error message to the rejected case
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const filterSlice = createSlice({
   name: "filter",
   initialState: initialState,
   reducers: {
-    setFilterValues: async (state, action) => {
+    setFilterValues: (state, action) => {
       const title = action.payload.title;
       state[title] = action.payload.values;
     },
-    resetFilterValues: (state) => {
+    resetFilterValues: (state, action) => {
       state.Categorie = [];
       state.Brand = [];
       state.Colors = [];
@@ -36,6 +62,12 @@ export const filterSlice = createSlice({
       };
       state.prices = [obj];
     },
+
+    updateFilters: (state, action) => {
+      console.log(action.payload, "action.payload");
+      //state = actoion.payload this not correxct
+      return { ...action.payload };
+    },
   },
 });
 
@@ -46,6 +78,7 @@ export const {
   resetFilterValues,
   removePaticularFilter,
   setPrice,
+  updateFilters,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

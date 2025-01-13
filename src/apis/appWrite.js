@@ -11,7 +11,7 @@ const promise = databases.updateDocument(
   "676a1ee4001ae452e2df", // collectoin id
   "676cc1a7001c009ca249",
   {
-    CategoryType: "Kids",
+    CategoryType: "kids",
     colors: JSON.stringify([
       {
         filterName:

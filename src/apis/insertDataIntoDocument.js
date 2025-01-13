@@ -8,6 +8,7 @@ export async function insertDataIntoDocument(
   value
 ) {
   try {
+    //getting document using col name and val
     const queryResponse = await databases.listDocuments(
       dataBaseId,
       collectionId,
@@ -18,6 +19,8 @@ export async function insertDataIntoDocument(
       console.log("No documents found matching the query.");
       return;
     }
+
+    // using documemnt id  we are updating the value
     const documentId = queryResponse.documents[0].$id;
     const response = await databases.updateDocument(
       dataBaseId,
@@ -27,7 +30,7 @@ export async function insertDataIntoDocument(
         selectedFilters: data,
       }
     );
-    console.log(response);
+    return response;
   } catch (error) {
     console.error(error);
   }
