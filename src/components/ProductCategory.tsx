@@ -42,8 +42,9 @@ export default function ProductCategory({
     categories: [],
     colors: [],
   });
+  const [refetch, setRefetch] = useState(false);
 
-  const allFilters = useSelector((state: any) => state.filterSlice);
+  // const allFilters = useSelector((state: any) => state.filterSlice);
 
   const [categorySearch, setCatgegorySearch] = useState("");
   const [brandSearch, setBrandSearch] = useState("");
@@ -107,7 +108,6 @@ export default function ProductCategory({
     count?: number;
     type: string;
   }) {
-    console.log(filterDetails);
     dispatch(
       removePaticularFilter({
         type: filterDetails.type,
@@ -137,7 +137,6 @@ export default function ProductCategory({
         name,
         ["brands", "categories", "colors"]
       );
-      console.log(details);
       setFilterDetails(details);
       setSearhFilterDetails({
         searchFilteredBrands: details?.brands,
@@ -162,26 +161,31 @@ export default function ProductCategory({
     });
   }, [categorySearch]);
 
-  useEffect(() => {
-    dispatch(fetctSelectedFilter() as any);
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetctSelectedFilter() as any);
+  // }, []);
+
+  async function insertData(allFilterState: any) {
+    const res = await insertDataIntoDocument(
+      JSON.stringify(allFilterState),
+      "676a1ec4001bf5b712d9",
+      "676a1ee4001ae452e2df",
+      "CategoryType",
+      name
+    );
+    if (!res) {
+      console.log("throewinf");
+      return new Error("error");
+    }
+    setRefetch(!refetch);
+  }
 
   useEffect(() => {
-    async function insertData() {
-      console.log("allFilters", allFilters);
-      const res = await insertDataIntoDocument(
-        JSON.stringify(allFilters),
-        "676a1ec4001bf5b712d9",
-        "676a1ee4001ae452e2df",
-        "CategoryType",
-        name
-      );
-      console.log(res, "dataRes");
+    async function fetchAndInsertData() {
+      let dispatchRes = await dispatch(fetctSelectedFilter() as any);
     }
-    setTimeout(() => {
-      insertData();
-    }, 4000);
-  }, [allFilters]);
+    fetchAndInsertData();
+  }, [refetch]);
 
   return (
     <div className="wrapper h-[88%]">
@@ -240,6 +244,7 @@ export default function ProductCategory({
                 ]}
                 isMulitiSelect={false}
                 isSearchable={false}
+                onSelectedFilter={insertData}
                 searchValue={""}
                 setSearchValue={() => {}}
               />
@@ -250,6 +255,7 @@ export default function ProductCategory({
                 isMulitiSelect={true}
                 isSearchable={true}
                 searchValue={categorySearch}
+                onSelectedFilter={insertData}
                 setSearchValue={setCatgegorySearch}
               />
               <FilterComponent
@@ -258,6 +264,7 @@ export default function ProductCategory({
                 filterValues={searchfilterdDetails.searchFilteredBrands}
                 isMulitiSelect={true}
                 searchValue={brandSearch}
+                onSelectedFilter={insertData}
                 setSearchValue={setBrandSearch}
                 isSearchable={true}
               />
@@ -285,11 +292,12 @@ export default function ProductCategory({
               <FilterComponent
                 title="Colors"
                 componentType="Colors"
-                filterValues={filterDetails.colors}
+                filterValues={filterDetails?.colors}
                 isMulitiSelect={true}
                 searchValue={""}
                 setSearchValue={() => {}}
                 isSearchable={false}
+                onSelectedFilter={insertData}
               />
               <FilterComponent
                 title={"Discount Range"}
@@ -316,6 +324,7 @@ export default function ProductCategory({
                 searchValue={""}
                 setSearchValue={() => {}}
                 isSearchable={false}
+                onSelectedFilter={insertData}
               />
             </div>
           </div>

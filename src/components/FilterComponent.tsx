@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoHandLeft } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
@@ -15,6 +15,7 @@ export default function FilterComponent({
   componentType,
   searchValue,
   setSearchValue,
+  onSelectedFilter,
 }: {
   title: string;
   filterValues: { filterName: string; count?: number; type: string }[];
@@ -22,13 +23,14 @@ export default function FilterComponent({
   isSearchable?: boolean;
   componentType: string;
   searchValue: string;
+  onSelectedFilter: (value: any) => void;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const dispatch = useDispatch();
   const storedValues = useSelector((state: any) => state.filterSlice)[
     componentType
   ];
-
+  const allFilterState = useSelector((state: any) => state.filterSlice);
   const firstItems = filterValues?.slice(0, 9);
 
   let sortedFilterValues: any = [];
@@ -44,8 +46,6 @@ export default function FilterComponent({
         };
         // setFilterValuesState((prev) => [...prev, obj]);
         sortedFilterValues = [obj, ...filterValues];
-        console.log(sortedFilterValues, "ssd");
-        console.log(obj, "obj");
         Alphabets = Alphabets.filter(
           (item) => item !== filterValues[i].filterName.charAt(0)
         );
@@ -58,13 +58,6 @@ export default function FilterComponent({
 
   const [isSearchEnabled, setIsSearchEnabled] = React.useState<boolean>(false);
 
-  // useEffect(() => {
-  //   let filteredValues = filterValues?.filter((item) => {
-  //     return item?.filterName.toLowerCase().includes(searchValue.toLowerCase());
-  //   });
-  //   setFilterValuesState(filterValues);
-  // }, [searchValue, filterValues]);
-
   async function handleClick(
     e: React.MouseEvent<HTMLInputElement>,
     count: number | undefined,
@@ -72,20 +65,38 @@ export default function FilterComponent({
   ) {
     if (isMulitiSelect) {
       if (e.currentTarget.checked) {
-        dispatch(
-          setFilterValues({
-            title: componentType,
-            values: [
-              ...storedValues,
-              {
-                filterName: e.currentTarget.value,
-                count: count ? count : 0,
-                type: type,
-              },
-            ],
-          })
-        );
+        // update on redux store
+        // dispatch(
+        //   setFilterValues({
+        //     title: componentType,
+        //     values: [
+        //       ...storedValues,
+        //       {
+        //         filterName: e.currentTarget.value,
+        //         count: count ? count : 0,
+        //         type: type,
+        //       },
+        //     ],
+        //   })
+        // );
+        // update on server
+        onSelectedFilter({
+          ...allFilterState,
+          [componentType]: [
+            ...storedValues,
+            {
+              filterName: e.currentTarget.value,
+              count: count ? count : 0,
+              type: type,
+            },
+          ],
+        });
       } else {
+        let stroeImage = {
+          title: componentType,
+          values: storedValues,
+        };
+        console.log(storedValues, "store");
         dispatch(
           setFilterValues({
             title: componentType,
@@ -94,6 +105,23 @@ export default function FilterComponent({
             ),
           })
         );
+        try {
+          // update on server
+          let retured = onSelectedFilter({
+            ...allFilterState,
+            [componentType]: storedValues?.filter(
+              (item: any) => item?.filterName !== e.currentTarget.value
+            ),
+          });
+          throw retured;
+        } catch (error) {
+          console.log("entereds");
+          setTimeout(() => {
+            dispatch(setFilterValues(stroeImage));
+          }, 1000);
+
+          // revert back my redux stor
+        }
       }
     } else {
       dispatch(
@@ -108,6 +136,16 @@ export default function FilterComponent({
           ],
         })
       );
+      onSelectedFilter({
+        ...allFilterState,
+        [componentType]: [
+          {
+            filterName: e.currentTarget.value,
+            count: count ? count : 0,
+            type: type,
+          },
+        ],
+      });
     }
   }
 
@@ -164,7 +202,7 @@ export default function FilterComponent({
                   type={isMulitiSelect ? "checkbox" : "radio"}
                   value={filter?.filterName}
                   checked={storedValues
-                    .map((item: any) => item?.filterName)
+                    ?.map((item: any) => item?.filterName)
                     .includes(filter?.filterName)}
                 />
 

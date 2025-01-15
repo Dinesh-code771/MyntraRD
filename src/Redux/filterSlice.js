@@ -23,7 +23,8 @@ export const fetctSelectedFilter = createAsyncThunk(
         ["selectedFilters"]
       );
       const { selectedFilters } = res;
-      console.log(selectedFilters, "selectedFilters");
+
+      console.log(res, "selectedFilters");
       dispatch(updateFilters(selectedFilters));
       // Return the response to be handled in extraReducers
       return res;
@@ -52,7 +53,6 @@ export const filterSlice = createSlice({
     removePaticularFilter: (state, action) => {
       const type = action.payload.type;
       const value = action.payload.value;
-      console.log(type, value);
       state[type] = state[type]?.filter((item) => item.filterName !== value);
     },
     setPrice: (state, action) => {

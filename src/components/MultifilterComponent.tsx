@@ -21,10 +21,10 @@ export default function MultifilterComponent({
   const [searchValue, setSearchValue] = React.useState<string>("");
   const [hoveredAlphabet, setHoveredAlphabet] = React.useState<string>("");
   const aplhabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-  console.log(aplhabets, "aplhabets");
+
   // Filter values based on searchValue
   useEffect(() => {
-    console.log(values, "values");
+
     const filteredValues = values.filter((value) => {
       return value.filterName.toLowerCase().includes(searchValue.toLowerCase());
     });

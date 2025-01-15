@@ -30,7 +30,7 @@ export default function ProductCard({
     return () => clearInterval(interval);
   }, [isHovered]);
   useEffect(() => {
-    console.log(current, "curre");
+
   }, [current]);
   return (
     <div
