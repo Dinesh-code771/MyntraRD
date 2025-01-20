@@ -6,41 +6,23 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-const promise = databases.updateDocument(
-  "676a1ec4001bf5b712d9", //dabase id
-  "676a1ee4001ae452e2df", // collectoin id
-  "677de5d100032d5b630a",
-  {
-    CategoryType: "mens",
-    colors: JSON.stringify([
-      {
-        filterName:
-          "<div className='flex items-center gap-3'> <div className='w-[10px] h-[10px] border rounded-full bg-[red]'></div> <p>Red</p></div>",
-        type: "Colors",
-      },
-      {
-        filterName:
-          "<div className='flex items-center gap-3'> <div className='w-[10px] h-[10px] border rounded-full bg-[blue]'></div> <p>blue</p></div>",
-        type: "Colors",
-      },
-      {
-        filterName:
-          "<div className='flex items-center gap-3'> <div className='w-[10px] h-[10px] border rounded-full bg-[green]'></div> <p>green</p></div>",
-        type: "Colors",
-      },
-      {
-        filterName:
-          "<div className='flex items-center gap-3'> <div className='w-[10px] h-[10px] border rounded-full bg-[black]'></div> <p>black</p></div>",
-        type: "Colors",
-      },
-      {
-        filterName:
-          "<div className='flex items-center gap-3'> <div className='w-[10px] h-[10px] border rounded-full bg-[white]'></div> <p>white</p></div>",
-        type: "Colors",
-      },
-    ]),
-  }
-);
+// const promise = databases.updateDocument(
+//   "676a1ec4001bf5b712d9", //dabase id
+//   "676a1ee4001ae452e2df", // collectoin id
+//   "676cc1a7001c009ca249",
+//   {
+//     CategoryType:"kids",
+//     selectedFilters: JSON.stringify({
+//       Categorie: [],
+//       Brand: [],
+//       Colors: [],
+//       Discount: [],
+//       Gender: [],
+//       prices: {},
+//       params: "",
+//     }),
+//   }
+// );
 
 export { client, databases };
 

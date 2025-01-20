@@ -3,12 +3,14 @@ import ProductCard from "./ProductCard";
 import { RiArrowDownWideLine, RiArrowUpWideLine } from "react-icons/ri";
 import FilterComponent from "./FilterComponent";
 import { RxCross2 } from "react-icons/rx";
+import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
   fetctSelectedFilter,
   removePaticularFilter,
   resetFilterValues,
+  setParams,
   setPrice,
 } from "../Redux/filterSlice";
 import Slider from "@mui/material/Slider";
@@ -35,7 +37,9 @@ type productDetailsProps = {
 export default function ProductCategory({
   productDetails,
 }: productDetailsProps) {
+  const dispatch = useDispatch();
   const { name } = useParams<{ name: string }>();
+
   const [currentSelected, setCurrentSelected] = useState<null | number>(null);
   const [filterDetails, setFilterDetails] = useState({
     brands: [],
@@ -53,7 +57,6 @@ export default function ProductCategory({
     searchfilterdCategories: [],
   });
 
-  const dispatch = useDispatch();
   const [values, setValues] = useState<number[]>([0, 0]);
   const color = pink[500];
   const allFilterState = useSelector((state: any) => state.filterSlice);
@@ -70,6 +73,10 @@ export default function ProductCategory({
     // key = Brand
     if (allFilterState[key]?.length > 0) {
       allFilterStateValues = [...allFilterStateValues, ...allFilterState[key]];
+    } else {
+      if (Object.keys(allFilterState[key]).length > 0) {
+        allFilterStateValues = [...allFilterStateValues, allFilterState[key]];
+      }
     }
   }
 
@@ -117,15 +124,35 @@ export default function ProductCategory({
   }
 
   function handleSlideChange(event: Event, newValue: number | number[]) {
+    //storing in local state and in redux store
     // @ts-ignore
     setValues([newValue[0], newValue[1]]);
     // @ts-ignore
     dispatch(setPrice([newValue[0], newValue[1]]));
+
+    //inserting into server
+    if (!Array.isArray(newValue)) return;
+    const obj: any = {
+      filterName: `Rs. ${newValue[0]} To Rs. ${newValue[1]}`,
+      isChecked: true,
+    };
+    insertData({ ...allFilterState, prices: obj });
   }
 
   function handleClearAll() {
     dispatch(resetFilterValues([]));
   }
+
+  useEffect(() => {
+    //if prices is empty obj return
+    if (!Object.keys(allFilterState.prices).length) return;
+    //if prices is not empty obj
+    let name = allFilterState.prices?.filterName;
+    let newValue = name?.split(" ");
+    console.log(newValue, "df");
+
+    setValues([newValue[1], newValue[newValue.length - 1]]);
+  }, [allFilterState.prices]);
 
   useEffect(() => {
     const categoryNameValue = name;
@@ -161,6 +188,10 @@ export default function ProductCategory({
     });
   }, [categorySearch]);
 
+  useEffect(() => {
+    dispatch(setParams(name));
+  }, [name]);
+
   // useEffect(() => {
   //   dispatch(fetctSelectedFilter() as any);
   // }, []);
@@ -173,10 +204,10 @@ export default function ProductCategory({
       "CategoryType",
       name
     );
-    if (!res) {
-      console.log("throewinf");
-      return new Error("error");
-    }
+    // if (!res) {
+    //   console.log("throewinf");
+    //   return new Error("error");
+    // }
     setRefetch(!refetch);
   }
 
@@ -186,6 +217,21 @@ export default function ProductCategory({
     }
     fetchAndInsertData();
   }, [refetch]);
+
+  useEffect(() => {
+   async function updateDataInServer(){
+    if (allFilterState.params) {
+      let dispatchRes = await dispatch(fetctSelectedFilter() as any);
+      console.log(dispatchRes, "dispatchRes");
+      insertData({
+        ...dispatchRes.payload.selectedFilters,
+        params: allFilterState.params,
+      });
+      console.log(allFilterState, "reddy");
+    }
+   }
+   updateDataInServer();
+  }, [allFilterState.params]);
 
   return (
     <div className="wrapper h-[88%]">
@@ -418,7 +464,11 @@ export default function ProductCategory({
               {allFilterStateValues?.map((value: any) => {
                 return (
                   <div className="flex gap-1 max-w-[500px] min-w-[100px] px-1 py-1 rounded-xl items-center justify-between border text-[#3e4152]">
-                    <p className="text-[0.7rem] ">{value?.filterName}</p>
+                    <p className="text-[0.7rem] ">
+                      {value.type === "Colors"
+                        ? parse(value?.filterName)
+                        : value.filterName}
+                    </p>
                     <RxCross2
                       onClick={() => {
                         handleRemoveFilter(value);

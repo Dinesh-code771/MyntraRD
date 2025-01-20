@@ -6,14 +6,16 @@ const initialState = {
   Colors: [],
   Discount: [],
   Gender: [],
-  prices: [],
+  prices: {},
+  params: "",
 };
 //thunk for fetching selected filters form the API
 
 export const fetctSelectedFilter = createAsyncThunk(
   "filter/fetchSelectedFilters",
-  async (name, { dispatch, rejectWithValue }) => {
+  async (name, { getState, dispatch, rejectWithValue }) => {
     try {
+      console.log(getState().filterSlice, "getState");
       // Call the API using the name parameter
       const res = await listDocuments(
         "676a1ec4001bf5b712d9",
@@ -60,7 +62,11 @@ export const filterSlice = createSlice({
         filterName: `Rs. ${action.payload[0]} To Rs. ${action.payload[1]}`,
         isChecked: true,
       };
-      state.prices = [obj];
+      state.prices = obj;
+    },
+
+    setParams: (state, action) => {
+      state.params = action.payload;
     },
 
     updateFilters: (state, action) => {
@@ -79,6 +85,7 @@ export const {
   removePaticularFilter,
   setPrice,
   updateFilters,
+  setParams,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

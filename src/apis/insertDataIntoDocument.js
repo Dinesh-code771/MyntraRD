@@ -8,7 +8,7 @@ export async function insertDataIntoDocument(
   value
 ) {
   try {
-    console.log("Called",data)
+    console.log("Called",columnName,value)
     //getting document using col name and val
     const queryResponse = await databases.listDocuments(
       dataBaseId,
