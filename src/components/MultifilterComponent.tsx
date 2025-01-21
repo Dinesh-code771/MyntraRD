@@ -6,10 +6,12 @@ export default function MultifilterComponent({
   onClose,
   values,
   componentType,
+  handleClick,
 }: {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
   values: { filterName: string; count?: number; type: string }[];
   componentType: string;
+  handleClick: any;
 }) {
   const storedValues = useSelector((state: any) => state.filterSlice)[
     componentType
@@ -24,7 +26,6 @@ export default function MultifilterComponent({
 
   // Filter values based on searchValue
   useEffect(() => {
-
     const filteredValues = values.filter((value) => {
       return value.filterName.toLowerCase().includes(searchValue.toLowerCase());
     });
@@ -97,6 +98,9 @@ export default function MultifilterComponent({
                       type="checkbox"
                       className="cursor-pointer accent-pink-500"
                       value={value.filterName}
+                      onClick={(e) =>
+                        handleClick(e, value.count, value.type)
+                      }
                       checked={storedValues
                         ?.map((item: any) => item?.filterName)
                         .includes(value?.filterName)}

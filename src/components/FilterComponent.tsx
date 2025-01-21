@@ -238,6 +238,7 @@ export default function FilterComponent({
           values={sortedFilterValues}
           onClose={setIsMulitiSelectEnabled}
           componentType={componentType}
+          handleClick={handleClick}
         />
       )}
     </div>
