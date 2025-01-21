@@ -21,7 +21,8 @@ export const fetctSelectedFilter = createAsyncThunk(
         "676a1ec4001bf5b712d9",
         "676a1ee4001ae452e2df",
         "CategoryType",
-        "kids", // Use the name argument
+        // "kids", // Use the name argument
+        getState().filterSlice["params"],
         ["selectedFilters"]
       );
       const { selectedFilters } = res;

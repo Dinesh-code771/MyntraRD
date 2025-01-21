@@ -71,14 +71,15 @@ export default function ProductCategory({
   let allFilterStateValues: any = [];
   for (let key in allFilterState) {
     // key = Brand
-    if (allFilterState[key]?.length > 0) {
+    if (allFilterState[key]?.length > 0 && key !== "params") {
       allFilterStateValues = [...allFilterStateValues, ...allFilterState[key]];
     } else {
-      if (Object.keys(allFilterState[key]).length > 0) {
+      if (Object.keys(allFilterState[key]).length > 0 && key !== "params") {
         allFilterStateValues = [...allFilterStateValues, allFilterState[key]];
       }
     }
   }
+
 
   //constants
   const topFiltes = [
@@ -219,18 +220,18 @@ export default function ProductCategory({
   }, [refetch]);
 
   useEffect(() => {
-   async function updateDataInServer(){
-    if (allFilterState.params) {
-      let dispatchRes = await dispatch(fetctSelectedFilter() as any);
-      console.log(dispatchRes, "dispatchRes");
-      insertData({
-        ...dispatchRes.payload.selectedFilters,
-        params: allFilterState.params,
-      });
-      console.log(allFilterState, "reddy");
+    async function updateDataInServer() {
+      if (allFilterState.params) {
+        let dispatchRes = await dispatch(fetctSelectedFilter() as any);
+        console.log(dispatchRes.payload.selectedFilters, "dispatchRes");
+        insertData({
+          ...dispatchRes.payload.selectedFilters,
+          params: allFilterState.params,
+        });
+        console.log(allFilterState, "reddy");
+      }
     }
-   }
-   updateDataInServer();
+    updateDataInServer();
   }, [allFilterState.params]);
 
   return (
