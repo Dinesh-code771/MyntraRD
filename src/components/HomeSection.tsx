@@ -12,6 +12,8 @@ export default function HomeSection() {
     <div className="flex flex-col gap-2">
       <div className="bg-white p-2  sticky top-[68px]">
         <Search
+          onChange={(e) => console.log(e.target.value)}
+          value=""
           placeholder={"Search by branch and category"}
           className="rounded-full shadow-lg overflow-hidden px-2 md:hidden"
         />

@@ -96,15 +96,15 @@ export default function FilterComponent({
           title: componentType,
           values: storedValues,
         };
-        console.log(storedValues, "store");
-        dispatch(
-          setFilterValues({
-            title: componentType,
-            values: storedValues?.filter(
-              (item: any) => item?.filterName !== e.currentTarget.value
-            ),
-          })
-        );
+
+        // dispatch(
+        //   setFilterValues({
+        //     title: componentType,
+        //     values: storedValues?.filter(
+        //       (item: any) => item?.filterName !== e.currentTarget.value
+        //     ),
+        //   })
+        // );
         try {
           // update on server
           let retured = onSelectedFilter({
@@ -124,18 +124,18 @@ export default function FilterComponent({
         }
       }
     } else {
-      dispatch(
-        setFilterValues({
-          title: componentType,
-          values: [
-            {
-              filterName: e.currentTarget.value,
-              count: count ? count : 0,
-              type: type,
-            },
-          ],
-        })
-      );
+      // dispatch(
+      //   setFilterValues({
+      //     title: componentType,
+      //     values: [
+      //       {
+      //         filterName: e.currentTarget.value,
+      //         count: count ? count : 0,
+      //         type: type,
+      //       },
+      //     ],
+      //   })
+      // );
       onSelectedFilter({
         ...allFilterState,
         [componentType]: [
@@ -148,7 +148,7 @@ export default function FilterComponent({
       });
     }
   }
-
+  console.log(storedValues, "store");
   return (
     <div className="relative border-b filterContainerWrapper p-3 flex flex-col gap-3">
       {/* filter header  */}

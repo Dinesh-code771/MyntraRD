@@ -54,13 +54,22 @@ export const filterSlice = createSlice({
       state.Gender = [];
     },
     removePaticularFilter: (state, action) => {
-      const type = action.payload.type;
+      const type = action.payload?.type;
       const value = action.payload.value;
+      if (type === "prices") {
+        state.prices = {
+          filterName: "Rs. 0 To Rs. 0",
+          type: "prices",
+          isChecked: false,
+        };
+        return;
+      }
       state[type] = state[type]?.filter((item) => item.filterName !== value);
     },
     setPrice: (state, action) => {
       const obj = {
         filterName: `Rs. ${action.payload[0]} To Rs. ${action.payload[1]}`,
+        type: "prices",
         isChecked: true,
       };
       state.prices = obj;

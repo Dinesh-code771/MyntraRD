@@ -70,6 +70,7 @@ const router = createBrowserRouter([
     path: "/login",
     element: <ProtectRouter>{<Login />}</ProtectRouter>,
   },
+
 ]);
 
 root.render(

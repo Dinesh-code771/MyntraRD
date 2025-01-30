@@ -5,7 +5,7 @@ import { LuHeart } from "react-icons/lu";
 import { CiUser } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { setMenuButtonClicked } from "../Redux/navBarSlice.js";
+import { setGlobalSearch, setMenuButtonClicked } from "../Redux/navBarSlice.js";
 import Search from "./Search";
 import { IoIosLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -14,8 +14,15 @@ export default function Navbar() {
   const isMenuBarOpen = useSelector(
     (state: any) => state.navBarSlice.isMenuButtonClicked
   );
+  const globalSearchValue = useSelector(
+    (state: any) => state.navBarSlice.globalSearchValue
+  );
   const dispatch = useDispatch();
   const { logout } = useAuth0();
+
+  function onGlobalSearchChange(e: any) {
+    dispatch(setGlobalSearch(e.target.value));
+  }
   return (
     <nav className="sticky top-0 bg-white shadow-md w-full z-50">
       <div className="wrapper py-5 w-[85%] md:w-[90%] mx-auto flex justify-between items-center">
@@ -66,6 +73,8 @@ export default function Navbar() {
         {/* right side */}
         <div className="rightWrapper md:flex md:items-center md:gap-10 flex-1 justify-end ">
           <Search
+            onChange={onGlobalSearchChange}
+            value={globalSearchValue}
             className="px-3 border bg-[#f5f5f6] rounded-md w-[80%]   hidden md:flex border-gray-300 md:items-center md:gap-5"
             placeholder="Search for products, brands and more"
           />
