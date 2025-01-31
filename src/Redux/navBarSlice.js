@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isMenuButtonClicked: false,
   globalSearchValue: "",
+  topFilters: [],
+  currentTopFilterSelected: null,
 };
 
 export const navBarSlice = createSlice({
@@ -15,11 +17,22 @@ export const navBarSlice = createSlice({
     setGlobalSearch: (state, action) => {
       state.globalSearchValue = action.payload;
     },
+    setTopFilters: (state, action) => {
+      state.topFilters = action.payload;
+    },
+    setCurrentTopFilterSelected: (state, action) => {
+      state.currentTopFilterSelected = action.payload;
+    },
   },
 });
 
 //actions created by createSlice
 
-export const { setMenuButtonClicked, setGlobalSearch } = navBarSlice.actions;
+export const {
+  setMenuButtonClicked,
+  setGlobalSearch,
+  setTopFilters,
+  setCurrentTopFilterSelected,
+} = navBarSlice.actions;
 
 export default navBarSlice.reducer;

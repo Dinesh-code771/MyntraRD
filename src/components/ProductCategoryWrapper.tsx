@@ -15,6 +15,9 @@ export default function ProductCategoryWrapper() {
   const selectedCategory = useSelector(
     (state: any) => state.filterSlice.Categorie
   );
+  const currentSelectedFilter = useSelector(
+    (state: any) => state.navBarSlice.currentTopFilterSelected
+  );
   const prices = useSelector((state: any) => state.filterSlice.prices);
   const selectedBrand = useSelector((state: any) => state.filterSlice.Brand);
   const selectedColor = useSelector((state: any) => state.filterSlice.Colors);
@@ -22,6 +25,8 @@ export default function ProductCategoryWrapper() {
   const [searchedProductDetails, setSearchedProductDetails] = React.useState<
     any[]
   >([]);
+
+  const topFiltes = useSelector((state: any) => state.navBarSlice.topFilters);
 
   //fetch products from database
   useEffect(() => {
@@ -100,7 +105,6 @@ export default function ProductCategoryWrapper() {
         }
       }) //color filter
       .filter((product: any) => {
-        console.log(product.colors, selectedColorNames, "colors");
         if (
           product?.colors?.some((item: any) => {
             return selectedColorNames.join("").includes(item.toLowerCase());
@@ -108,6 +112,24 @@ export default function ProductCategoryWrapper() {
         ) {
           return product;
         } else if (selectedColorNames.length === 0) {
+          return product;
+        }
+      })
+      .filter((product) => {
+        // ['3-9'] ---> "3-9" ===> [3,9]
+        if (currentSelectedFilter === null) return product;
+        if (topFiltes[currentSelectedFilter].selectedValues.length === 0)
+          return product;
+        let selectedAges = topFiltes[currentSelectedFilter].selectedValues
+          .join()
+          .split("-");
+        let productAge = product.age;
+        let [min, max] = [parseInt(selectedAges[0]), parseInt(selectedAges[1])];
+        if (min >= productAge[0] && min <= productAge[1]) {
+          return product;
+        } else if (max >= productAge[0] && max <= productAge[1]) {
+          return product;
+        } else if (selectedAges.length === 0) {
           return product;
         }
       }) //search by title
@@ -125,6 +147,8 @@ export default function ProductCategoryWrapper() {
     selectedBrand,
     selectedCategory,
     selectedColor,
+    topFiltes,
+    currentSelectedFilter,
   ]);
 
   return (

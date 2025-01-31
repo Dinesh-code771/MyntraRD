@@ -22,6 +22,14 @@ export async function insetPerticularColumn(
       return;
     }
 
+    function checkAndInsert(array, value) {
+      if (array.includes(value)) {
+        return array.filter((val) => val != value);
+      } else {
+        return [...array, value];
+      }
+    }
+
     // using documemnt id  we are updating the value
     const documentId = queryResponse.documents[0].$id;
     console.log(queryResponse.documents[0], "document");
@@ -30,7 +38,7 @@ export async function insetPerticularColumn(
         if (index === data.index) {
           return {
             ...value,
-            selectedValues: [...value.selectedValues, data.value],
+            selectedValues: checkAndInsert(value.selectedValues, data.value),
           };
         } else {
           return value;

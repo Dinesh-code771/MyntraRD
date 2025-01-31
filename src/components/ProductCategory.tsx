@@ -24,6 +24,10 @@ import { listDocuments } from "../apis/listDocuments";
 import { useParams } from "react-router-dom";
 import { insertDataIntoDocument } from "../apis/insertDataIntoDocument";
 import { insetPerticularColumn } from "../apis/insertPerticularColumn";
+import {
+  setCurrentTopFilterSelected,
+  setTopFilters,
+} from "../Redux/navBarSlice";
 type productDetailsProps = {
   productDetails: {
     title: string;
@@ -41,7 +45,10 @@ export default function ProductCategory({
   const dispatch = useDispatch();
   const { name } = useParams<{ name: string }>();
 
-  const [currentSelected, setCurrentSelected] = useState<null | number>(null);
+  // const [currentSelected, setCurrentSelected] = useState<null | number>(null);
+  const currentSelected = useSelector(
+    (state: any) => state.navBarSlice.currentTopFilterSelected
+  );
   const [filterDetails, setFilterDetails] = useState({
     brands: [],
     categories: [],
@@ -64,7 +71,8 @@ export default function ProductCategory({
   const allFilterState = useSelector((state: any) => state.filterSlice);
   // const [selectedTopFilter, setSelectedTopFilter] = useState<string[]>([]);
 
-  const [topFiltes, setTopFilters] = useState([]);
+  // const [topFiltes, setTopFilters] = useState([]);
+  const topFiltes = useSelector((state: any) => state.navBarSlice.topFilters);
 
   // {
   //   Categorie: [{},{}.{}],
@@ -175,7 +183,7 @@ export default function ProductCategory({
         searchFilteredBrands: details?.brands,
         searchfilterdCategories: details?.categories,
       });
-      setTopFilters(details.topFilters);
+      dispatch(setTopFilters(details.topFilters));
     }
     fetchDetails();
   }, [refetch]);
@@ -401,14 +409,14 @@ export default function ProductCategory({
             <div className="flex  justify-between">
               <div className="flex flex-[4] justify-between items-center">
                 <div className="flex gap-3 items-center justify-center">
-                  {topFiltes?.map((filter: any, index) => {
+                  {topFiltes?.map((filter: any, index: number) => {
                     return (
                       <div
                         onClick={() => {
                           if (currentSelected === index) {
-                            return setCurrentSelected(null);
+                            return dispatch(setCurrentTopFilterSelected(null));
                           }
-                          setCurrentSelected(index);
+                          dispatch(setCurrentTopFilterSelected(index));
                         }}
                         key={index}
                       >
@@ -467,7 +475,10 @@ export default function ProductCategory({
                       <div key={index} className="flex gap-[0.5] items-center ">
                         <input
                           onClick={() =>
-                            updateDataInServerForTopFilter(value, currentSelected)
+                            updateDataInServerForTopFilter(
+                              value,
+                              currentSelected
+                            )
                           }
                           checked={topFiltes[
                             currentSelected
