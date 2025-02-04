@@ -28,6 +28,7 @@ import {
   setCurrentTopFilterSelected,
   setTopFilters,
 } from "../Redux/navBarSlice";
+import { setWishList } from "../Redux/wishListSlice";
 type productDetailsProps = {
   productDetails: {
     title: string;
@@ -176,7 +177,14 @@ export default function ProductCategory({
         "676a1ee4001ae452e2df",
         "CategoryType",
         name,
-        ["brands", "categories", "colors", "selectedFilters", "topFilters"]
+        [
+          "brands",
+          "categories",
+          "colors",
+          "selectedFilters",
+          "topFilters",
+          "wishListItems",
+        ]
       );
       setFilterDetails(details);
       setSearhFilterDetails({
@@ -184,6 +192,7 @@ export default function ProductCategory({
         searchfilterdCategories: details?.categories,
       });
       dispatch(setTopFilters(details.topFilters));
+      dispatch(setWishList(details.wishListItems ? details.wishListItems : []));
     }
     fetchDetails();
   }, [refetch]);

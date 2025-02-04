@@ -1,5 +1,7 @@
 import React from "react";
 import { IoIosArrowDown } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { setSelectedSortValue } from "../Redux/navBarSlice";
 export default function DropDown({
   title,
   values,
@@ -11,6 +13,7 @@ export default function DropDown({
     id: string;
     name: string;
   }>(values[0]);
+  const dispatch = useDispatch();
   return (
     <div className="wrapper absolute z-40 h-[40px] border min-w-[250px] bg-white shadow-md hover:h-auto overflow-hidden">
       <div className="boxx px-2 py-3 flex justify-between">
@@ -28,7 +31,10 @@ export default function DropDown({
             className={`boxx px-4 py-3 flex text-sm i hover:bg-[#F5F5F6] ${
               value.name === selectedValue.name ? "bg-gray-200" : ""
             }`}
-            onClick={() => setSelectedValue(value)}
+            onClick={() => {
+              setSelectedValue(value);
+              dispatch(setSelectedSortValue(value));
+            }}
           >
             {value.name}
           </span>

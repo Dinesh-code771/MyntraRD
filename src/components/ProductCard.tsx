@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
+import { addToWishList } from "../Redux/wishListSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { insetPerticularColumn } from "../apis/insertPerticularColumn";
+import { useParams } from "react-router-dom";
 export default function ProductCard({
   title,
   decription,
@@ -8,6 +12,7 @@ export default function ProductCard({
   size,
   rating,
   likes,
+  isWishListItem = false,
 }: {
   title: string;
   decription: string;
@@ -16,9 +21,13 @@ export default function ProductCard({
   size?: string;
   rating: number;
   likes?: string;
+  isWishListItem?: boolean;
 }) {
   const [current, setCurrent] = React.useState(0);
   const [isHovered, setIsHovered] = React.useState(false);
+  const dispatch = useDispatch();
+  const { name } = useParams<{ name: string }>();
+  const wishList = useSelector((state: any) => state.wishListSlice.wishList);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -29,22 +38,50 @@ export default function ProductCard({
     }
     return () => clearInterval(interval);
   }, [isHovered]);
-  useEffect(() => {
 
-  }, [current]);
+  useEffect(() => {}, [current]);
+
+  function handleWishList(title: string) {
+    if (wishList.includes(title)) {
+      return;
+    }
+    console.log("clicked");
+    dispatch(addToWishList(title));
+    console.log(wishList, "wishList");
+  }
+  //fetch
+  useEffect(() => {
+    async function updateDataInServerForTopFilter(data: any) {
+      const res = await insetPerticularColumn(
+        data,
+        "676a1ec4001bf5b712d9",
+        "676a1ee4001ae452e2df",
+        "CategoryType",
+        name,
+        "wishListItems",
+        false
+      );
+      return res;
+    }
+    const res = updateDataInServerForTopFilter(wishList);
+    console.log(res, "res");
+  }, [wishList]);
   return (
     <div
-      onClick={() => setIsHovered(true)}
+      onClick={() => {
+        if (isWishListItem) return;
+        setIsHovered(true);
+      }}
       onMouseLeave={() => {
         console.log("sds");
         setIsHovered(false);
         setCurrent(0);
       }}
-      className="hover:shadow-lg"
+      className={`${!isWishListItem ? "hover:shadow-lg" : "border relative"}`}
     >
       <div
         className={`w-full relative  cursor-pointer ${
-          isHovered ? "h-[200px]" : ""
+          isHovered ? "h-auto" : ""
         }  transition ease-in-out`}
       >
         <img
@@ -52,7 +89,7 @@ export default function ProductCard({
           alt=""
           className="w-full  h-full object-cover"
         />
-        {!isHovered && (
+        {!isWishListItem && !isHovered && (
           <div className="rating absolute bottom-1 items-center flex gap-3 left-1 bg-[#D4D4D4] text-black px-2 py-2 rounded-sm">
             <p className="text-[0.6rem] font-bold ">{rating}</p>
             <p className="text-[0.6rem] font-bold ">{likes}</p>
@@ -66,6 +103,7 @@ export default function ProductCard({
             images.map((image, index) => {
               return (
                 <div
+                  key={index}
                   onClick={(e) => {
                     e.stopPropagation();
                     setCurrent(index);
@@ -80,9 +118,18 @@ export default function ProductCard({
         <div className="flex gap-2 flex-col">
           {isHovered ? (
             <>
-              <div className="wishList mt-2 flex justify-center gap-2 items-center border py-2 border-[] rounded-md">
-                <CiHeart />
-                <p className="uppercase font-bold text-xs">WishList</p>
+              <div
+                className={`wishList cursor-pointer mt-2 ${
+                  wishList.includes(title) ? "bg-[lightGrey]" : "bg-white"
+                } flex justify-center gap-2 items-center border py-2  rounded-md`}
+              >
+                <CiHeart
+                  onClick={() => handleWishList(title)}
+                  color={wishList.includes(title) ? "red" : ""}
+                />
+                <p className="uppercase font-bold text-xs">
+                  {wishList.includes(title) ? "Wishlisted" : " Wishlist"}
+                </p>
               </div>
               <div className="size">
                 <span>
@@ -97,7 +144,21 @@ export default function ProductCard({
             </>
           )}
           <p className="text-xs font-bold">{`Rs. ${price}`}</p>
+          {isWishListItem ? (
+            <div className="w-full flex justify-center items-center border-t ">
+              <button className="p-2 font-semibold text-[#ff3e6c] text-sm">
+                Move To Bag
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
+      </div>
+      <div className="cross cursor-pointer absolute top-2 right-2">
+        <button className="text-xs bg-[lightgrey] py-2 px-3 rounded-full">
+          X
+        </button>
       </div>
     </div>
   );

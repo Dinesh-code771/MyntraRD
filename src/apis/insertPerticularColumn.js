@@ -6,7 +6,8 @@ export async function insetPerticularColumn(
   collectionId,
   columnName,
   value,
-  key
+  key,
+  isTopFilter = true
 ) {
   try {
     console.log("Called", columnName, value, key, data);
@@ -51,7 +52,9 @@ export async function insetPerticularColumn(
       collectionId,
       documentId,
       {
-        [key]: JSON.stringify(particularColumn),
+        [key]: isTopFilter
+          ? JSON.stringify(particularColumn)
+          : JSON.stringify(data),
       }
     );
     return response;

@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { listDocuments } from "../apis/listDocuments";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setProductsDetails } from "../Redux/navBarSlice";
 
 export default function ProductCategoryWrapper() {
   //useEffect to scroll to top
@@ -18,6 +19,9 @@ export default function ProductCategoryWrapper() {
   const currentSelectedFilter = useSelector(
     (state: any) => state.navBarSlice.currentTopFilterSelected
   );
+  const selectedSortValue = useSelector(
+    (state: any) => state.navBarSlice.selectedSortValue
+  );
   const prices = useSelector((state: any) => state.filterSlice.prices);
   const selectedBrand = useSelector((state: any) => state.filterSlice.Brand);
   const selectedColor = useSelector((state: any) => state.filterSlice.Colors);
@@ -25,6 +29,7 @@ export default function ProductCategoryWrapper() {
   const [searchedProductDetails, setSearchedProductDetails] = React.useState<
     any[]
   >([]);
+  const dispatch = useDispatch();
 
   const topFiltes = useSelector((state: any) => state.navBarSlice.topFilters);
 
@@ -40,6 +45,7 @@ export default function ProductCategoryWrapper() {
         ["productDetails"]
       );
       setProductDetails(details?.productDetails);
+      dispatch(setProductsDetails(details?.productDetails));
     }
     fetchDetails();
     // databases
@@ -63,6 +69,19 @@ export default function ProductCategoryWrapper() {
     //     console.error("API Error:", error);
     //   });
   }, []);
+
+  function handleSortProducts(filteredProducts: any) {
+    switch (selectedSortValue.name) {
+      case "Price: Low to High":
+        return filteredProducts.sort((a: any, b: any) => a.price - b.price);
+      case "Price: High to Low":
+        return filteredProducts.sort((a: any, b: any) => b.price - a.price);
+      case "Popularity":
+        return filteredProducts.sort((a: any, b: any) => b.rating - a.rating);
+      default:
+        return filteredProducts;
+    }
+  }
 
   //search functionality
   useEffect(() => {
@@ -138,7 +157,7 @@ export default function ProductCategoryWrapper() {
           .toLowerCase()
           .includes(globalSearchValue.toLowerCase());
       });
-
+    const sortedValues = handleSortProducts(filteredProducts);
     setSearchedProductDetails(filteredProducts);
   }, [
     globalSearchValue,
@@ -149,6 +168,7 @@ export default function ProductCategoryWrapper() {
     selectedColor,
     topFiltes,
     currentSelectedFilter,
+    selectedSortValue,
   ]);
 
   return (

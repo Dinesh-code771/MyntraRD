@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setGlobalSearch, setMenuButtonClicked } from "../Redux/navBarSlice.js";
 import Search from "./Search";
 import { IoIosLogOut } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 export default function Navbar() {
   const isMenuBarOpen = useSelector(
@@ -19,6 +19,7 @@ export default function Navbar() {
   );
   const dispatch = useDispatch();
   const { logout } = useAuth0();
+  const navigate = useNavigate();
 
   function onGlobalSearchChange(e: any) {
     dispatch(setGlobalSearch(e.target.value));
@@ -79,7 +80,7 @@ export default function Navbar() {
             placeholder="Search for products, brands and more"
           />
           <div className="icons flex justify-end gap-5">
-            <LuHeart size={20} />
+            <LuHeart onClick={() => navigate("/wishlist")} size={20} />
             <IoBagOutline size={20} />
             <IoIosLogOut
               size={20}
