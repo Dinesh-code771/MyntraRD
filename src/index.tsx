@@ -78,19 +78,17 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Auth0Provider
-        domain="dev-tresq8jdl7pjothi.us.auth0.com"
-        clientId="dNVynycykrU9R2PpJIkcH6KHAtjUCm5g"
-        authorizationParams={{
-          redirect_uri: window.location.origin,
-        }}
-      >
-        <RouterProvider router={router} />
-      </Auth0Provider>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <Auth0Provider
+      domain="dev-tresq8jdl7pjothi.us.auth0.com"
+      clientId="dNVynycykrU9R2PpJIkcH6KHAtjUCm5g"
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+      }}
+    >
+      <RouterProvider router={router} />
+    </Auth0Provider>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

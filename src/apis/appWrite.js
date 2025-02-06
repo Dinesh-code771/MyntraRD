@@ -14,6 +14,7 @@ const databases = new Databases(client);
 //     CategoryType: "kids",
 //     // productDetails: JSON.stringify([
 //     //   {
+//     //     id: 1,
 //     //     title: "T-shirt",
 //     //     decription: "This is a t-shirt",
 //     //     catergoryType: "shirts",
@@ -34,6 +35,7 @@ const databases = new Databases(client);
 //     //     likes: "200",
 //     //   },
 //     //   {
+//     //     id:2,
 //     //     title: "Shirt",
 //     //     decription: "This is a shirt",
 //     //     catergoryType: "Shirt",
@@ -54,6 +56,7 @@ const databases = new Databases(client);
 //     //     likes: "300",
 //     //   },
 //     //   {
+//     //     id:3,
 //     //     title: "Jeans",
 //     //     decription: "This is a jeans",
 //     //     catergoryType: "dresses",
@@ -74,6 +77,7 @@ const databases = new Databases(client);
 //     //     likes: "100",
 //     //   },
 //     //   {
+//     //     id:4,
 //     //     title: "hoodies",
 //     //     decription: "This is a hoodie",
 //     //     price: 400,
@@ -94,6 +98,7 @@ const databases = new Databases(client);
 //     //     likes: "150",
 //     //   },
 //     //   {
+//     //     id:5,
 //     //     title: "sweatshirt",
 //     //     decription: "This is a sweatshirt",
 //     //     price: 500,
@@ -112,6 +117,7 @@ const databases = new Databases(client);
 //     //     likes: "400",
 //     //   },
 //     //   {
+//     //     id:6,
 //     //     title: "Dress",
 
 //     //     decription: "This is a Dress",
@@ -133,42 +139,54 @@ const databases = new Databases(client);
 //     //     likes: "250",
 //     //   },
 //     // ]),
-//     topFilters: JSON.stringify([
-//       {
-//         name: "Age",
-//         values: [
-//           "0-3",
-//           "3-6",
-//           "6-9",
-//           "9-12",
-//           "12-15",
-//           "15-18",
-//           "18-21",
-//           "21-24",
-//           "24-27",
-//           "27-30",
-//           "30-33",
-//           "33-36",
-//           "36-39",
-//           "39-42",
-//           "42-45",
-//           "45-48",
-//         ],
-//         selectedValues: [],
-//       },
-//       {
-//         name: "Bundles",
-//         values: ["budles", "singleStyles"],
-//         selectedValues: [],
-//       },
+//     // // topFilters: JSON.stringify([
+//     // //   {
+//     // //     name: "Age",
+//     // //     values: [
+//     // //       "0-3",
+//     // //       "3-6",
+//     // //       "6-9",
+//     // //       "9-12",
+//     // //       "12-15",
+//     // //       "15-18",
+//     // //       "18-21",
+//     // //       "21-24",
+//     // //       "24-27",
+//     // //       "27-30",
+//     // //       "30-33",
+//     // //       "33-36",
+//     // //       "36-39",
+//     // //       "39-42",
+//     // //       "42-45",
+//     // //       "45-48",
+//     // //     ],
+//     // //     selectedValues: [],
+//     // //   },
+//     // //   {
+//     // //     name: "Bundles",
+//     // //     values: ["budles", "singleStyles"],
+//     // //     selectedValues: [],
+//     // //   },
 
-//       {
-//         name: "Country of origin",
-//         values: ["India", "China", "USA"],
-//         selectedValues: [],
-//       },
-//       { name: "Size", values: ["S", "M", "L", "XL"], selectedValues: [] },
-//     ]),
+//     // //   {
+//     // //     name: "Country of origin",
+//     // //     values: ["India", "China", "USA"],
+//     // //     selectedValues: [],
+//     // //   },
+//     // //   { name: "Size", values: ["S", "M", "L", "XL"], selectedValues: [] },
+//     // // ]),
+//     // selectedFilters: JSON.stringify(
+//     //   {
+//     //     Categorie: [],
+//     //     Brand: [],
+//     //     Colors: [],
+//     //     Discount: [],
+//     //     Gender: [],
+//     //     prices: {},
+//     //     params: "kids",
+//     //   },
+//     // ),
+//     wishListItems: JSON.stringify([]),
 //   }
 // );
 

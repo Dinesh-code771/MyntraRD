@@ -32,6 +32,7 @@ import { setWishList } from "../Redux/wishListSlice";
 type productDetailsProps = {
   productDetails: {
     title: string;
+    id: number;
     decription: string;
     price: number;
     images: string[];
@@ -244,7 +245,8 @@ export default function ProductCategory({
       "676a1ee4001ae452e2df",
       "CategoryType",
       name,
-      "topFilters"
+      "topFilters",
+      true
     );
     setRefetch(!refetch);
   }
@@ -544,6 +546,7 @@ export default function ProductCategory({
                 productDetails?.map((product, index) => {
                   return (
                     <ProductCard
+                      id={product.id}
                       key={index}
                       title={product.title}
                       decription={product.decription}

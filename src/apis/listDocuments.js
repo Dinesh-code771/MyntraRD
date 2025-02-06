@@ -12,6 +12,7 @@ export async function listDocuments(
       Query.equal(columnName, value),
     ]);
     const { documents } = response;
+    console.log(documents, "documents");
     let details = {};
     for (let i = 0; i < getThisDetails.length; i++) {
       details[getThisDetails[i]] = JSON.parse(documents[0][getThisDetails[i]]);

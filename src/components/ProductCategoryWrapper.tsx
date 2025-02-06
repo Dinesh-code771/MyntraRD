@@ -86,18 +86,18 @@ export default function ProductCategoryWrapper() {
   //search functionality
   useEffect(() => {
     let categoryName = selectedCategory?.map((category: any) =>
-      category.filterName?.toLowerCase()
+      category?.filterName?.toLowerCase()
     );
     let selectedColorNames = selectedColor?.map((color: any) =>
-      color.filterName?.toLowerCase()
+      color?.filterName?.toLowerCase()
     );
-    let pricesString = prices.filterName;
+    let pricesString = prices?.filterName;
     let [min, max] = ["0", "0"];
     if (pricesString?.length > 0) {
       [min, max] = [pricesString.split(" ")[1], pricesString.split(" ")[4]];
     }
     let brandsName = selectedBrand?.map((brand: any) =>
-      brand.filterName.toLowerCase()
+      brand?.filterName.toLowerCase()
     );
     let filteredProducts = productDetails //filter by category
       .filter((product: any) => {
@@ -142,6 +142,12 @@ export default function ProductCategoryWrapper() {
         let selectedAges = topFiltes[currentSelectedFilter].selectedValues
           .join()
           .split("-");
+        console.log(
+          selectedAges,
+          "selectedAges",
+          topFiltes[currentSelectedFilter]
+        );
+        if (topFiltes[currentSelectedFilter].name != "Ages") return product;
         let productAge = product.age;
         let [min, max] = [parseInt(selectedAges[0]), parseInt(selectedAges[1])];
         if (min >= productAge[0] && min <= productAge[1]) {
@@ -158,7 +164,7 @@ export default function ProductCategoryWrapper() {
           .includes(globalSearchValue.toLowerCase());
       });
     const sortedValues = handleSortProducts(filteredProducts);
-    setSearchedProductDetails(filteredProducts);
+    setSearchedProductDetails(sortedValues);
   }, [
     globalSearchValue,
     productDetails,

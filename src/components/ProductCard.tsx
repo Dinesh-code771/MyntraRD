@@ -12,6 +12,7 @@ export default function ProductCard({
   size,
   rating,
   likes,
+  id,
   isWishListItem = false,
 }: {
   title: string;
@@ -21,6 +22,7 @@ export default function ProductCard({
   size?: string;
   rating: number;
   likes?: string;
+  id: Number;
   isWishListItem?: boolean;
 }) {
   const [current, setCurrent] = React.useState(0);
@@ -39,14 +41,12 @@ export default function ProductCard({
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  useEffect(() => {}, [current]);
-
-  function handleWishList(title: string) {
-    if (wishList.includes(title)) {
+  function handleWishList(id: Number) {
+    if (wishList.includes(id)) {
       return;
     }
     console.log("clicked");
-    dispatch(addToWishList(title));
+    dispatch(addToWishList(id));
     console.log(wishList, "wishList");
   }
   //fetch
@@ -63,8 +63,8 @@ export default function ProductCard({
       );
       return res;
     }
-    const res = updateDataInServerForTopFilter(wishList);
-    console.log(res, "res");
+    if (!name) return;
+    updateDataInServerForTopFilter(wishList);
   }, [wishList]);
   return (
     <div
@@ -120,15 +120,15 @@ export default function ProductCard({
             <>
               <div
                 className={`wishList cursor-pointer mt-2 ${
-                  wishList.includes(title) ? "bg-[lightGrey]" : "bg-white"
+                  wishList.includes(id) ? "bg-[lightGrey]" : "bg-white"
                 } flex justify-center gap-2 items-center border py-2  rounded-md`}
               >
                 <CiHeart
-                  onClick={() => handleWishList(title)}
+                  onClick={() => handleWishList(id)}
                   color={wishList.includes(title) ? "red" : ""}
                 />
                 <p className="uppercase font-bold text-xs">
-                  {wishList.includes(title) ? "Wishlisted" : " Wishlist"}
+                  {wishList.includes(id) ? "Wishlisted" : " Wishlist"}
                 </p>
               </div>
               <div className="size">

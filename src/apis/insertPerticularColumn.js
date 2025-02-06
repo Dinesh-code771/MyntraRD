@@ -34,7 +34,7 @@ export async function insetPerticularColumn(
     // using documemnt id  we are updating the value
     const documentId = queryResponse.documents[0].$id;
     console.log(queryResponse.documents[0], "document");
-    const particularColumn = JSON.parse(queryResponse.documents[0][key]).map(
+    const particularColumn = JSON.parse(queryResponse.documents[0][key])?.map(
       (value, index) => {
         if (index === data.index) {
           return {
