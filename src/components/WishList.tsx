@@ -5,7 +5,7 @@ import { listDocuments } from "../apis/listDocuments";
 import { setWishList } from "../Redux/wishListSlice";
 import { useParams } from "react-router-dom";
 import { setProductsDetails } from "../Redux/navBarSlice";
-import {store} from "../Redux/store";
+import { store } from "../Redux/store";
 let categoryType = ["mens", "kids"];
 export default function WishList() {
   const wishListItems = useSelector(
@@ -50,7 +50,7 @@ export default function WishList() {
     categoryType.forEach((type) => {
       fetchDetails(type);
     });
-  }, [dispatch, categoryType]);
+  }, []);
 
   console.log(productWishListItems, "productWishListItems", wishListItems);
   return (
