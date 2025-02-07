@@ -10,6 +10,7 @@ import Search from "./Search";
 import { IoIosLogOut } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { resetWishList } from "../Redux/wishListSlice.js";
 export default function Navbar() {
   const isMenuBarOpen = useSelector(
     (state: any) => state.navBarSlice.isMenuButtonClicked
@@ -80,7 +81,14 @@ export default function Navbar() {
             placeholder="Search for products, brands and more"
           />
           <div className="icons flex justify-end gap-5">
-            <LuHeart onClick={() => navigate("/wishlist")} size={20} />
+            <LuHeart
+              onClick={() => {
+                
+                navigate("/wishlist");
+                window.location.reload();
+              }}
+              size={20}
+            />
             <IoBagOutline size={20} />
             <IoIosLogOut
               size={20}

@@ -15,11 +15,15 @@ export const wishListSlice = createSlice({
     setWishList: (state, action) => {
       state.wishList = action.payload;
     },
+    resetWishList: (state,action) => {
+      state.wishList = action.payload;
+    },
   },
 });
 
 //actions created by createSlice
 
-export const { addToWishList, setWishList } = wishListSlice.actions;
+export const { addToWishList, setWishList, resetWishList } =
+  wishListSlice.actions;
 
 export default wishListSlice.reducer;

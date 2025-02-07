@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
-import { addToWishList } from "../Redux/wishListSlice";
+import { addToWishList, resetWishList } from "../Redux/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { insetPerticularColumn } from "../apis/insertPerticularColumn";
 import { useParams } from "react-router-dom";
@@ -64,7 +64,10 @@ export default function ProductCard({
       return res;
     }
     if (!name) return;
+    console.log("updating data in server", wishList);
     updateDataInServerForTopFilter(wishList);
+
+
   }, [wishList]);
   return (
     <div

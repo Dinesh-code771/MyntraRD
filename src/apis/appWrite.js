@@ -9,9 +9,9 @@ const databases = new Databases(client);
 // const promise = databases.updateDocument(
 //   "676a1ec4001bf5b712d9", //dabase id
 //   "676a1ee4001ae452e2df", // collectoin id
-//   "676cc1a7001c009ca249",
+//   "677de5d100032d5b630a",
 //   {
-//     CategoryType: "kids",
+//     CategoryType: "mens",
 //     // productDetails: JSON.stringify([
 //     //   {
 //     //     id: 1,

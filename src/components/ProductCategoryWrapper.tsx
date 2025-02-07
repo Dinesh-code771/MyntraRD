@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { listDocuments } from "../apis/listDocuments";
 import { useDispatch, useSelector } from "react-redux";
 import { setProductsDetails } from "../Redux/navBarSlice";
+import { resetWishList } from "../Redux/wishListSlice";
 
 export default function ProductCategoryWrapper() {
   //useEffect to scroll to top
@@ -82,6 +83,12 @@ export default function ProductCategoryWrapper() {
         return filteredProducts;
     }
   }
+
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(resetWishList([]));
+  //   };
+  // }, []);
 
   //search functionality
   useEffect(() => {

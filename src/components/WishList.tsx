@@ -10,7 +10,8 @@ let categoryType = ["mens", "kids"];
 export default function WishList() {
   const wishListItems = useSelector(
     (state: any) => state.wishListSlice.wishList
-  );
+    //[1,2]
+  ); 
   const productDetails = useSelector(
     (state: any) => state.navBarSlice.productsDetails
   );
@@ -19,6 +20,7 @@ export default function WishList() {
   const productWishListItems = productDetails.filter((product: any) =>
     wishListItems.includes(product.id)
   );
+
 
   useEffect(() => {
     async function fetchDetails(typeOfCategory: string) {
@@ -32,11 +34,11 @@ export default function WishList() {
       );
       console.log(details?.wishListItems, "details?.wishListItems");
 
-      // Get the latest state before updating
+      // // Get the latest state before updating
       const currentWishList = store.getState().wishListSlice.wishList;
       const currentProducts = store.getState().navBarSlice.productsDetails;
 
-      dispatch(
+      dispatch(             //[1]     ,,,      [2]
         setWishList([...currentWishList, ...(details?.wishListItems || [])])
       );
       dispatch(
