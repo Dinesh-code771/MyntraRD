@@ -184,7 +184,6 @@ export default function ProductCategory({
           "colors",
           "selectedFilters",
           "topFilters",
-          "wishListItems",
         ]
       );
       setFilterDetails(details);
@@ -192,8 +191,7 @@ export default function ProductCategory({
         searchFilteredBrands: details?.brands,
         searchfilterdCategories: details?.categories,
       });
-      dispatch(setTopFilters(details.topFilters));
-      dispatch(setWishList(details.wishListItems ? details.wishListItems : []));
+      dispatch(setTopFilters(details?.topFilters));
     }
     fetchDetails();
   }, [refetch]);
@@ -554,6 +552,7 @@ export default function ProductCategory({
                       images={product.images}
                       rating={product.rating}
                       likes={product.likes}
+                      product={product}
                     />
                   );
                 })

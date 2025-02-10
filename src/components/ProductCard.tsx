@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
-import { addToWishList, resetWishList } from "../Redux/wishListSlice";
+import { addToWishList, resetWishList, setRefetch } from "../Redux/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { insetPerticularColumn } from "../apis/insertPerticularColumn";
 import { useParams } from "react-router-dom";
+import { databases } from "../apis/appWrite.js";
+import { Query } from "appwrite";
+// import { Databases } from "appwrite";
 export default function ProductCard({
   title,
   decription,
@@ -14,6 +17,7 @@ export default function ProductCard({
   likes,
   id,
   isWishListItem = false,
+  product,
 }: {
   title: string;
   decription: string;
@@ -23,14 +27,17 @@ export default function ProductCard({
   rating: number;
   likes?: string;
   id: Number;
+  product: any;
   isWishListItem?: boolean;
 }) {
   const [current, setCurrent] = React.useState(0);
   const [isHovered, setIsHovered] = React.useState(false);
   const dispatch = useDispatch();
   const { name } = useParams<{ name: string }>();
-  const wishList = useSelector((state: any) => state.wishListSlice.wishList);
+  // const wishList = useSelector((state: any) => state.wishListSlice.wishList);
+  const [wishListItems, setWishListItems] = React.useState<any[]>([]);
 
+  const refetch = useSelector((state: any) => state.wishListSlice.refetch);
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isHovered) {
@@ -41,34 +48,70 @@ export default function ProductCard({
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  function handleWishList(id: Number) {
-    if (wishList.includes(id)) {
+  async function updateDataInServerForTopFilter(
+    product: any,
+    isRemove = false
+  ) {
+    //fetch data from server
+    let document = await databases.listDocuments(
+      "676a1ec4001bf5b712d9",
+      "67a9650e00254ea62e60",
+      [Query.equal("$id", "67a966630010d16c0e61")]
+    );
+    let items = document.documents[0].wishtListProducts;
+    items = JSON.parse(items); //10
+
+    if (isRemove) {
+      items = items.filter((item: any) => item.id !== product.id); //9
+    }
+    // update data in server
+    const res = await databases.updateDocument(
+      "676a1ec4001bf5b712d9",
+      "67a9650e00254ea62e60",
+      "67a966630010d16c0e61",
+      {
+        wishtListProducts: JSON.stringify(
+          isRemove ? [...items] : [...items, product]
+        ),
+      }
+    );
+
+    //update state
+    isRemove ? setWishListItems(items) : setWishListItems([...items, product]);
+    if (isRemove) {
+      dispatch(setRefetch(!refetch));
+    }
+    return res;
+  }
+
+  function handleWishList(product: any) {
+    if (wishListItems.includes(id)) {
       return;
     }
     console.log("clicked");
-    dispatch(addToWishList(id));
-    console.log(wishList, "wishList");
+    // dispatch(addToWishList(id));
+    updateDataInServerForTopFilter(product);
   }
-  //fetch
+
+  function handleRemove(product: any) {
+    updateDataInServerForTopFilter(product, true);
+  }
+
   useEffect(() => {
-    async function updateDataInServerForTopFilter(data: any) {
-      const res = await insetPerticularColumn(
-        data,
+    async function fetchItems() {
+      let document = await databases.listDocuments(
         "676a1ec4001bf5b712d9",
-        "676a1ee4001ae452e2df",
-        "CategoryType",
-        name,
-        "wishListItems",
-        false
+        "67a9650e00254ea62e60",
+        [Query.equal("$id", "67a966630010d16c0e61")]
       );
-      return res;
+      let items = document.documents[0].wishtListProducts;
+      items = JSON.parse(items);
+      //upaate state
+      setWishListItems(items);
     }
-    if (!name) return;
-    console.log("updating data in server", wishList);
-    updateDataInServerForTopFilter(wishList);
-
-
-  }, [wishList]);
+    fetchItems();
+  }, []);
+  //fetch
   return (
     <div
       onClick={() => {
@@ -123,15 +166,19 @@ export default function ProductCard({
             <>
               <div
                 className={`wishList cursor-pointer mt-2 ${
-                  wishList.includes(id) ? "bg-[lightGrey]" : "bg-white"
+                  wishListItems.map((item) => item.id).includes(id)
+                    ? "bg-[lightGrey]"
+                    : "bg-white"
                 } flex justify-center gap-2 items-center border py-2  rounded-md`}
               >
                 <CiHeart
-                  onClick={() => handleWishList(id)}
-                  color={wishList.includes(title) ? "red" : ""}
+                  onClick={() => handleWishList(product)}
+                  color={wishListItems.includes(title) ? "red" : ""}
                 />
                 <p className="uppercase font-bold text-xs">
-                  {wishList.includes(id) ? "Wishlisted" : " Wishlist"}
+                  {wishListItems.map((item) => item.id).includes(id)
+                    ? "Wishlisted"
+                    : " Wishlist"}
                 </p>
               </div>
               <div className="size">
@@ -159,7 +206,10 @@ export default function ProductCard({
         </div>
       </div>
       <div className="cross cursor-pointer absolute top-2 right-2">
-        <button className="text-xs bg-[lightgrey] py-2 px-3 rounded-full">
+        <button
+          onClick={() => handleRemove(product)}
+          className="text-xs bg-[lightgrey] py-2 px-3 rounded-full"
+        >
           X
         </button>
       </div>
