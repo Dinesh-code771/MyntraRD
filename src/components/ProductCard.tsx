@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
-import { addToWishList, resetWishList, setRefetch } from "../Redux/wishListSlice";
+import {
+  addToWishList,
+  resetWishList,
+  setRefetch,
+} from "../Redux/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { insetPerticularColumn } from "../apis/insertPerticularColumn";
 import { useParams } from "react-router-dom";
 import { databases } from "../apis/appWrite.js";
 import { Query } from "appwrite";
+import fetchDataFromCollection from "../apis/fetchDataFromCollection";
+import updateDocument from "../apis/updateDocument";
 // import { Databases } from "appwrite";
 export default function ProductCard({
   title,
@@ -48,32 +54,29 @@ export default function ProductCard({
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  async function updateDataInServerForTopFilter(
+  async function fetchAndUpdateData(
     product: any,
     isRemove = false
   ) {
     //fetch data from server
-    let document = await databases.listDocuments(
+    let items = await fetchDataFromCollection(
       "676a1ec4001bf5b712d9",
       "67a9650e00254ea62e60",
-      [Query.equal("$id", "67a966630010d16c0e61")]
+      "67a966630010d16c0e61",
+      "$id",
+      "wishtListProducts"
     );
-    let items = document.documents[0].wishtListProducts;
-    items = JSON.parse(items); //10
 
     if (isRemove) {
       items = items.filter((item: any) => item.id !== product.id); //9
     }
     // update data in server
-    const res = await databases.updateDocument(
+    const res = await updateDocument(
       "676a1ec4001bf5b712d9",
       "67a9650e00254ea62e60",
       "67a966630010d16c0e61",
-      {
-        wishtListProducts: JSON.stringify(
-          isRemove ? [...items] : [...items, product]
-        ),
-      }
+      "wishtListProducts",
+      isRemove ? [...items] : [...items, product]
     );
 
     //update state
@@ -90,24 +93,23 @@ export default function ProductCard({
     }
     console.log("clicked");
     // dispatch(addToWishList(id));
-    updateDataInServerForTopFilter(product);
+    fetchAndUpdateData(product);
   }
 
   function handleRemove(product: any) {
-    updateDataInServerForTopFilter(product, true);
+    fetchAndUpdateData(product, true);
   }
 
   useEffect(() => {
     async function fetchItems() {
-      let document = await databases.listDocuments(
+      const data = await fetchDataFromCollection(
         "676a1ec4001bf5b712d9",
         "67a9650e00254ea62e60",
-        [Query.equal("$id", "67a966630010d16c0e61")]
+        "67a966630010d16c0e61",
+        "$id",
+        "wishtListProducts"
       );
-      let items = document.documents[0].wishtListProducts;
-      items = JSON.parse(items);
-      //upaate state
-      setWishListItems(items);
+      setWishListItems(data);
     }
     fetchItems();
   }, []);

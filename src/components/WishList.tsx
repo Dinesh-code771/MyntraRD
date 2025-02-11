@@ -8,24 +8,23 @@ import { setProductsDetails } from "../Redux/navBarSlice";
 import { store } from "../Redux/store";
 import { databases } from "../apis/appWrite";
 import { Query } from "appwrite";
-
+import fetchDataFromCollection from "../apis/fetchDataFromCollection";
 export default function WishList() {
   const [wishListItems, setWishListItems] = React.useState<any[]>([]);
   const refetch = useSelector((state: any) => state.wishListSlice.refetch);
   useEffect(() => {
     //fetch wishList items from database
-    async function fetchDetails() {
-      let document = await databases.listDocuments(
+    async function fetchWishListItems() {
+      const data = await fetchDataFromCollection(
         "676a1ec4001bf5b712d9",
         "67a9650e00254ea62e60",
-        [Query.equal("$id", "67a966630010d16c0e61")]
+        "67a966630010d16c0e61",
+        "$id",
+        "wishtListProducts"
       );
-      let items = document.documents[0].wishtListProducts;
-      items = JSON.parse(items);
-      console.log(items, "items");
-      setWishListItems(items);
+      setWishListItems(data);
     }
-    fetchDetails();
+    fetchWishListItems();
   }, [refetch]);
 
   return (

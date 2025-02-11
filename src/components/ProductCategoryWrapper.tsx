@@ -92,6 +92,8 @@ export default function ProductCategoryWrapper() {
 
   //search functionality
   useEffect(() => {
+
+
     let categoryName = selectedCategory?.map((category: any) =>
       category?.filterName?.toLowerCase()
     );
