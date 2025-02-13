@@ -7,7 +7,7 @@ import {
 } from "../Redux/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { insetPerticularColumn } from "../apis/insertPerticularColumn";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import { databases } from "../apis/appWrite.js";
 import { Query } from "appwrite";
 import fetchDataFromCollection from "../apis/fetchDataFromCollection";
@@ -42,7 +42,7 @@ export default function ProductCard({
   const { name } = useParams<{ name: string }>();
   // const wishList = useSelector((state: any) => state.wishListSlice.wishList);
   const [wishListItems, setWishListItems] = React.useState<any[]>([]);
-
+  const navigate = useNavigate();
   const refetch = useSelector((state: any) => state.wishListSlice.refetch);
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -54,12 +54,10 @@ export default function ProductCard({
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  async function fetchAndUpdateData(
-    product: any,
-    isRemove = false
-  ) {
+  async function fetchAndUpdateData(product: any, isRemove = false) {
     //fetch data from server
     let items = await fetchDataFromCollection(
+      //[{}]
       "676a1ec4001bf5b712d9",
       "67a9650e00254ea62e60",
       "67a966630010d16c0e61",
@@ -117,6 +115,9 @@ export default function ProductCard({
   return (
     <div
       onClick={() => {
+        navigate(`/category/${name}/${id}`);
+      }}
+      onMouseEnter={() => {
         if (isWishListItem) return;
         setIsHovered(true);
       }}

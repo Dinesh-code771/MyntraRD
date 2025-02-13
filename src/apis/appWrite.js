@@ -23,8 +23,10 @@ const databases = new Databases(client);
 //     //     gender: "boy",
 //     //     discount: 10,
 //     //     age: [10, 12],
-//     //     countryOforigin: "India",
+//     //     countryOforign: "India",
 //     //     size: "M",
+     // size number :[]
+     //ava
 //     //     bundles: "single",
 //     //     price: 100,
 //     //     images: [
