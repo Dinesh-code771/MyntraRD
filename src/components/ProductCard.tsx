@@ -7,7 +7,7 @@ import {
 } from "../Redux/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { insetPerticularColumn } from "../apis/insertPerticularColumn";
-import { useParams, useNavigate  } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { databases } from "../apis/appWrite.js";
 import { Query } from "appwrite";
 import fetchDataFromCollection from "../apis/fetchDataFromCollection";
@@ -175,7 +175,10 @@ export default function ProductCard({
                 } flex justify-center gap-2 items-center border py-2  rounded-md`}
               >
                 <CiHeart
-                  onClick={() => handleWishList(product)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleWishList(product);
+                  }}
                   color={wishListItems.includes(title) ? "red" : ""}
                 />
                 <p className="uppercase font-bold text-xs">
@@ -210,7 +213,10 @@ export default function ProductCard({
       </div>
       <div className="cross cursor-pointer absolute top-2 right-2">
         <button
-          onClick={() => handleRemove(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemove(product);
+          }}
           className="text-xs bg-[lightgrey] py-2 px-3 rounded-full"
         >
           X

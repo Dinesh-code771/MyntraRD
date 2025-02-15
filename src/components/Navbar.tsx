@@ -11,6 +11,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { resetWishList } from "../Redux/wishListSlice.js";
+import SearchWithSuggestion from "./SearchWithSuggestion";
 export default function Navbar() {
   const isMenuBarOpen = useSelector(
     (state: any) => state.navBarSlice.isMenuButtonClicked
@@ -74,16 +75,16 @@ export default function Navbar() {
 
         {/* right side */}
         <div className="rightWrapper md:flex md:items-center md:gap-10 flex-1 justify-end ">
-          <Search
+          {/* <Search
             onChange={onGlobalSearchChange}
             value={globalSearchValue}
             className="px-3 border bg-[#f5f5f6] rounded-md w-[80%]   hidden md:flex border-gray-300 md:items-center md:gap-5"
             placeholder="Search for products, brands and more"
-          />
+          /> */}
+          <SearchWithSuggestion />
           <div className="icons flex justify-end gap-5">
             <LuHeart
               onClick={() => {
-                
                 navigate("/wishlist");
                 window.location.reload();
               }}

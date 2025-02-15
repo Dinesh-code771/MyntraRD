@@ -29,6 +29,7 @@ import {
   setTopFilters,
 } from "../Redux/navBarSlice";
 import { setWishList } from "../Redux/wishListSlice";
+import Pagination from "./Pagination";
 type productDetailsProps = {
   productDetails: {
     title: string;
@@ -46,7 +47,7 @@ export default function ProductCategory({
 }: productDetailsProps) {
   const dispatch = useDispatch();
   const { name } = useParams<{ name: string }>();
-
+  const [currentPage, setCurrentPage] = useState(1);
   // const [currentSelected, setCurrentSelected] = useState<null | number>(null);
   const currentSelected = useSelector(
     (state: any) => state.navBarSlice.currentTopFilterSelected
@@ -178,13 +179,7 @@ export default function ProductCategory({
         "676a1ee4001ae452e2df",
         "CategoryType",
         name,
-        [
-          "brands",
-          "categories",
-          "colors",
-          "selectedFilters",
-          "topFilters",
-        ]
+        ["brands", "categories", "colors", "selectedFilters", "topFilters"]
       );
       setFilterDetails(details);
       setSearhFilterDetails({
@@ -538,26 +533,34 @@ export default function ProductCategory({
                 })}
             </div>
             {/* right section bottom */}
-            <div className="cardsWrapper ] w-full gap-5  p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 border-t border-l ">
+            <div className="cardsWrapper  w-full gap-5  p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 border-t border-l ">
               {
                 // map the product details
-                productDetails?.map((product, index) => {
-                  return (
-                    <ProductCard
-                      id={product.id}
-                      key={index}
-                      title={product.title}
-                      decription={product.decription}
-                      price={product.price}
-                      images={product.images}
-                      rating={product.rating}
-                      likes={product.likes}
-                      product={product}
-                    />
-                  );
-                })
+                productDetails
+                  .slice((currentPage - 1) * 2, currentPage * 2) //(2,4)
+                  ?.map((product, index) => {
+                    return (
+                      <ProductCard
+                        id={product.id}
+                        key={index}
+                        title={product.title}
+                        decription={product.decription}
+                        price={product.price}
+                        images={product.images}
+                        rating={product.rating}
+                        likes={product.likes}
+                        product={product}
+                      />
+                    );
+                  })
               }
             </div>
+            <Pagination
+              totalData={productDetails.length}
+              dataPerPage={2}
+              onPageChange={setCurrentPage}
+              currentPage={currentPage}
+            />
           </div>
         </div>
       </div>

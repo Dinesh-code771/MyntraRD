@@ -11,6 +11,7 @@ export default function Search({
   onChange: (e: any) => void;
   value: string;
 }) {
+  
   return (
     <div
       className={`${className} flex items-center  border border-gray-300 px-1`}

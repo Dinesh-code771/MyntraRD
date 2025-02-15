@@ -3,10 +3,60 @@ import { useParams } from "react-router-dom";
 import { databases } from "../apis/appWrite";
 import { listDocuments } from "../apis/listDocuments";
 import ReviewComponent from "./ReviewComponent";
+import { TbCardsFilled } from "react-icons/tb";
+import HeaderRouter from "./HeaderRouter";
+import updateDocument from "../apis/updateDocument";
+import { useDispatch, useSelector } from "react-redux";
+import { setRefetch } from "../Redux/wishListSlice";
+import fetchDataFromCollection from "../apis/fetchDataFromCollection";
+
 export default function SelectedProduct() {
   const { id, name } = useParams<{ id: string; name: string }>();
   const [product, setProduct] = useState<any>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [wishListItems, setWishListItems] = useState<any>([]);
+  const dispatch = useDispatch();
+  const refetch = useSelector((state: any) => state.wishListSlice.refetch);
+  // const wishListItems = useSelector((state: any) => state.wishList.wishListItems);
+  async function fetchAndUpdateData(product: any, isRemove = false) {
+    //fetch data from server
+    let items = await fetchDataFromCollection(
+      //[{}]
+      "676a1ec4001bf5b712d9",
+      "67a9650e00254ea62e60",
+      "67a966630010d16c0e61",
+      "$id",
+      "wishtListProducts"
+    );
 
+    if (isRemove) {
+      items = items.filter((item: any) => item.id !== product.id); //9
+    }
+    // update data in server
+    const res = await updateDocument(
+      "676a1ec4001bf5b712d9",
+      "67a9650e00254ea62e60",
+      "67a966630010d16c0e61",
+      "wishtListProducts",
+      isRemove ? [...items] : [...items, product]
+    );
+    console.log(items, "items");
+    //update state
+    isRemove ? setWishListItems(items) : setWishListItems([...items, product]);
+    if (isRemove) {
+      dispatch(setRefetch(!refetch));
+    }
+    return res;
+  }
+
+  function handleWishList(product: any) {
+    if (wishListItems.includes(id)) {
+      return;
+    }
+    console.log("clicked");
+    // dispatch(addToWishList(id));
+    fetchAndUpdateData(product);
+  }
   useEffect(() => {
     const fetchProduct = async () => {
       const product: any = await listDocuments(
@@ -26,18 +76,40 @@ export default function SelectedProduct() {
   }, [id, name]);
   return (
     <div className="container flex flex-col gap-4 w-[70%] mx-auto h-[80%]">
-      <div className="header">
-        <h1>{"This is a header"}</h1>
+      <div className="header my-5">
+        <HeaderRouter
+          titles={[
+            { title: "Home", link: "" },
+            { title: name as string, link: `category/${name}` },
+            { title: product?.brand, link: "" },
+          ]}
+        />
       </div>
       <div className="body flex gap-5 h-full">
         <div className="left flex-1 grid grid-cols-2 gap-4">
           {Array.from({ length: 5 }).map((_, index) => (
-            <div className="w-full h-[400px] bg-gray-200">
+            <div className="w-full h-[400px] bg-gray-200 relative">
               <img
                 src={product?.images[index]}
                 alt={product?.title}
-                className="w-full h-full object-containe"
+                className="w-full h-full object-containe cursor-zoom-in hover:scale-105 transition-all duration-300"
               />
+              {index === 1 && (
+                <div
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                  className={
+                    "absolute bottom-5 cursor-pointer border-2 border-gray-100 shadow-lg right-5 w-10 hover:w-40 transition-all duration-300 h-10 bg-white rounded-full flex items-center justify-between px-2"
+                  }
+                >
+                  {isHovering && (
+                    <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                      View Product
+                    </p>
+                  )}
+                  <TbCardsFilled size={20} color="#ff3e6c" className="" />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -87,8 +159,11 @@ export default function SelectedProduct() {
             <button className="bg-gray-200 flex-1 py-4 px-2 rounded-md flex items-center justify-center">
               <p>Add to Bag</p>
             </button>
-            <button className="bg-gray-200 flex-1   py-4 px-2 rounded-md flex items-center justify-center">
-              <p>Wishlist</p>
+            <button
+              onClick={() => handleWishList(product)}
+              className="bg-gray-200 flex-1   py-4 px-2 rounded-md flex items-center justify-center"
+            >
+              <p>{!wishListItems.find((item: any) => item.id === product.id) ? "Wishlist" : " Wishlisted"}</p>
             </button>
           </div>
           <div className="review_container">
